@@ -6,7 +6,12 @@ y = np.array([3,5,7,9])
 w = 0.0
 b = 0.0
 
+sw = 0
+sb = 0
+
 lr = 0.01
+beta = 0.9
+eps = 1e-8
 epochs = 1000
 n = len(x)
 
@@ -17,11 +22,10 @@ for epoch in range(epochs):
     dw = (2/n) * np.sum((y_pred - y) * x)
     db = (2/n) * np.sum(y_pred - y)
 
-    w -= lr * dw
-    b -= lr * db
+    sw = beta * sw + (1 - beta) * (dw ** 2)
+    sb = beta * sb + (1 - beta) * (db ** 2)
+
+    w -= lr * dw / (np.sqrt(sw) + eps)
+    b -= lr * db / (np.sqrt(sb) + eps)
 
 print(w, b)
-
-# (venv) PS E:\luyen ml> python optimization/batch-gradient-descent.py
-# 2.0048610156782556 0.9857080211211781
-# (venv) PS E:\luyen ml> 
